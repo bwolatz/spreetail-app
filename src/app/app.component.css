@@ -1,0 +1,48 @@
+.list_task_incomplete {
+    width: 40%;
+    margin-right: 8%; 
+    background-color: aquamarine; 
+    float: left; 
+    padding-left: 5px; 
+    margin-bottom: 10px; 
+    word-wrap: break-word;
+}
+
+.list_task_complete {
+    width: 40%;
+    margin-right: 8%; 
+    background-color: coral; 
+    float: left; 
+    padding-left: 5px; 
+    margin-bottom: 10px; 
+    word-wrap: break-word;
+}
+
+.main_row {
+    margin-right: 15%;
+    margin-left: 15%;
+    width: 70%;
+    float: left;
+    background-color: #ebfaf7;
+    height:100vh; 
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.r_button {
+    background-color:#f35b60;
+	-moz-border-radius:28px;
+	-webkit-border-radius:28px;
+	border-radius:28px;
+	border:1px solid #f35b60;
+	display:inline-block;
+	cursor:pointer;
+    color: white;
+	font-size:14px;
+	padding:6px 24px;
+}
+
+.r_button:hover {
+    background-color: white;
+	color: #f35b60;
+}

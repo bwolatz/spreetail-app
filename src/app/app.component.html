@@ -1,0 +1,173 @@
+<div [ngClass]="'main_row'">
+    <h1 style="text-align: center;">{{title}}</h1>
+    <h3>{{error}}</h3>
+    
+    <div *ngIf="categories.length > 0">
+        Filter By Category: 
+        <select [(ngModel)]="filterCategory">
+            <option [ngValue]="0">No Filter</option>
+            <option [ngValue]="category.num" *ngFor="let category of categories">  
+                {{category.name}}
+            </option>
+        </select>
+        <br>
+    </div>
+    
+    <div style="width: 100%; margin-top: 20px; float: left;">
+        <div *ngIf="addingCategory">
+            <hr>
+            Category Name: <input type="textarea" [(ngModel)]="newCategoryText">
+            <br>
+            <br>
+            <button (click)="addCategory()" [ngClass]="'r_button'">Save Category</button>
+            <button (click)="closeAddCategory()" [ngClass]="'r_button'">Cancel</button>
+            <hr>
+        </div>
+        <div *ngIf="addingCategory === false">
+            <button (click)="startAddCategory()" [ngClass]="'r_button'">Add A New Category</button>
+        </div>
+    </div>
+
+    <div *ngIf="addingTask" style="width: 100%;">
+        <hr>
+        <h3> New Task </h3>
+        <div>
+            Task Title: <input type="text" [(ngModel)]="newTitle">
+        </div>
+        <br>
+        <div>
+            Task Description: <input type="textarea" [(ngModel)]="newDescription">
+        </div>
+        <br>
+        <div>
+            Estimated Time: <input type="text" [(ngModel)]="newEstimatedTime">
+        </div>
+        <br>
+        <div *ngIf="categories.length > 0">
+            Category: 
+            <select [(ngModel)]="newCategory">
+                <option value=""></option>
+                <option [ngValue]="category" *ngFor="let category of categories">  
+                    {{category.name}}
+                </option>
+            </select>
+            <br>
+            <br>
+        </div>
+        <div>
+            <button (click)="addTask()" [ngClass]="'r_button'">Save Task</button>
+        </div>
+        <br>
+        <div>
+            <button (click)="closeAddTask()" [ngClass]="'r_button'">Close Section</button>
+        </div>
+        <hr>
+    </div>
+    
+    <div style="width: 100%; float: left;" *ngIf="addingTask === false">
+        <br>
+        <button (click)="startAddTask()" [ngClass]="'r_button'">Add A New Task</button>
+        <br>
+        <br>
+    </div>
+
+    <div *ngIf="editTaskId > 0" style="width: 100%;">
+        <hr>
+        <h3> Edit Task </h3>
+        <div>
+            Task Title: <input type="text" [(ngModel)]="editTask.title">
+        </div>
+        <br>
+        <div>
+            Task Description: <input type="text" [(ngModel)]="editTask.description">
+        </div>
+        <br>
+        <div>
+            Estimated Time: <input type="text" [(ngModel)]="editTask.estimatedTime">
+        </div>
+        <br>
+        <div *ngIf="categories.length > 0">
+            Category: 
+            <select [(ngModel)]="editTask.category">
+                <option value=""></option>
+                <option [ngValue]="category" *ngFor="let category of categories">  
+                    {{category.name}}
+                </option>
+            </select>
+            <br>
+            <br>
+        </div>
+        <div *ngIf="editTask.notes.length > 0">
+            <div>
+                Notes:
+            </div>
+            <div *ngFor="let note of editTask.notes">
+                {{note.timestamp}}: {{note.text}}
+            </div>
+            <br>
+        </div>
+        <div>
+            New Note: <input type="textarea" [(ngModel)]="noteText">
+        </div>
+        <div>
+            <button (click)="addNote()" [ngClass]="'r_button'">Add Note</button>
+        </div>
+        <br>
+        <div>
+            Task Complete: <input [(ngModel)]="newComplete" type="checkbox">
+        </div>
+        <br>
+        <div>
+            <button (click)="closeEdit()" [ngClass]="'r_button'">Save and Close Section</button>
+        </div>
+        <hr>
+    </div>
+    
+    <br>
+
+    <div *ngFor="let task of tasks">
+        <div *ngIf="task.complete === false && (filterCategory === 0 || (task.category && filterCategory === task.category.num))" [ngClass]="{'list_task_incomplete': true}">
+            <span style="font-weight: bold;">{{task.title}}</span>
+            <span style="font-style: italic; float: right;" *ngIf="task.category">Category: {{task.category.name}}</span>
+            <br>
+            {{task.description}}
+            <br>
+            <span *ngIf="task.estimatedTime.length > 0" style="font-style: italic;">Estimated Time: {{task.estimatedTime}}</span>
+            <div *ngIf="task.notes.length > 0">
+                <div>
+                    Notes:
+                </div>
+                <div *ngFor="let note of task.notes">
+                    {{note.timestamp}}: {{note.text}}
+                </div>
+            </div>
+            <br *ngIf="task.notes.length <= 0">
+            <button style="float: right;" (click)="bringToEdit(task.num)">Edit</button> 
+        </div>
+    </div>
+
+    <br>
+    
+    <div style="width: 100%; margin-top: 20px; float: left;" *ngIf="tasksCompleted > 0">
+        <h2>Completed Tasks</h2>
+    </div>
+    
+    <div *ngFor="let task of tasks">
+        <div *ngIf="task.complete && (filterCategory === 0 || (task.category && filterCategory === task.category.num))" [ngClass]="{'list_task_complete': true}">
+            <span style="font-weight: bold;">{{task.title}}</span>
+            <span style="font-style: italic; float: right;" *ngIf="task.category">Category: {{task.category.name}}</span>
+            <br>
+            {{task.description}}
+            <br>
+            <span *ngIf="task.estimatedTime.length > 0" style="font-style: italic;">Estimated Time: {{task.estimatedTime}}</span>
+            <div *ngIf="task.notes.length > 0">
+                <div>
+                    Notes:
+                </div>
+                <div *ngFor="let note of task.notes">
+                    {{note.timestamp}}: {{note.text}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
