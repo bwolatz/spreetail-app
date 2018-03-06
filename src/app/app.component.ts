@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { Note } from './classes/note';
 import { Category } from './classes/category';
 import { Task } from './classes/task';
@@ -23,14 +23,15 @@ export class AppComponent {
     
     filterCategory: number = 0;
     
-    noteText: string = "";
-    
     editTaskId: number = 0;
     editTask: Task;
+    
+    tasksCompleted: number = 0;
     
     addingCategory: boolean = false;
     addingTask: boolean = false;
     
+    // input variables for new objects
     newTitle: string = "";
     newDescription: string = "";
     newEstimatedTime: string = "";
@@ -39,8 +40,9 @@ export class AppComponent {
     
     newCategoryText: string = "";
     
-    tasksCompleted: number = 0;
+    noteText: string = "";
     
+    // performs a search for the selected id and ensures that the task is not already completed
     bringToEdit(selectedId) {
         this.closeAddTask();
         this.error = "";
@@ -57,6 +59,7 @@ export class AppComponent {
         }
     }
     
+    // if saved as complete, update task and counter. reset current input 
     closeEdit() {
         if (this.newComplete) {
             this.tasksCompleted++;
@@ -68,8 +71,8 @@ export class AppComponent {
         this.noteText = "";
     }
     
+    // do an input check then save the note text to the task
     addNote() {
-        console.log(this.filterCategory);
         if (this.noteText.length <= 0) {
             this.error = "No note to add.";
         } else {
@@ -79,6 +82,7 @@ export class AppComponent {
         }
     }
     
+    // bring up the forms to enter a new task
     startAddTask() {
         this.newComplete = false;
         this.closeEdit();
@@ -89,19 +93,20 @@ export class AppComponent {
         this.newCategory = null;
     }
     
+    // input check and save the task object
     addTask() {
         if (this.newTitle.length <= 0) {
             this.error = "No title for task.";
         } else if (this.newDescription.length <= 0) {
             this.error = "No task description.";
         } else {
-            let newTask = new Task(this.nextTaskId, this.newTitle, this.newDescription, this.newEstimatedTime, this.newCategory);
-            this.nextTaskId++;
+            let newTask = new Task(this.nextTaskId++, this.newTitle, this.newDescription, this.newEstimatedTime, this.newCategory);
             this.tasks.push(newTask);
             this.closeAddTask()
         }
     }
     
+    // reset input fields
     closeAddTask() {
         this.error = "";
         this.addingTask = false;
@@ -110,23 +115,25 @@ export class AppComponent {
         this.newEstimatedTime = "";
     }
     
+    // bring up the forms to add a new category
     startAddCategory() {
         this.error = "";
         this.addingCategory = true;
         this.newCategoryText = "";
     }
     
+    // input check and save the new category object
     addCategory() {
         if (this.newCategoryText.length <= 0) {
             this.error = "No Category Text entered.";
         } else {
-            let category = new Category(this.nextCategoryId, this.newCategoryText);
-            this.nextCategoryId++;
+            let category = new Category(this.nextCategoryId++, this.newCategoryText);
             this.categories.push(category);
             this.closeAddCategory();
         }
     }
     
+    // reset input variables
     closeAddCategory() {
         this.error = "";
         this.addingCategory = false;
